@@ -52,14 +52,10 @@
 
 ## Overview 🌟
 
-<p align="center">
-  <a href="docs/novelclaw-demo.mp4">
-    <img src="docs/hero.png" alt="Watch the NovelClaw demo video" width="100%">
-  </a>
-</p>
+docs/novelclaw-demo.mp4
 
 <p align="center">
-  <sub>Click the preview image to open the NovelClaw demo video (.mp4).</sub>
+  <sub>Demo showcase of the NovelClaw workspace.</sub>
 </p>
 
 `NovelClaw` is the core writing workspace in this GitHub-safe public bundle. While `Portal` provides a clean public entry path and `MultiAgent` offers an optional faster ideation lane, the sustained long-form writing experience is concentrated in NovelClaw itself.

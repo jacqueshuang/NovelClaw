@@ -320,6 +320,9 @@ chapters/
 
 </details>
 
+## 🙇‍ 特别感谢
+[Linux.do](https://linux.do/)
+
 ## 更多文档 📚
 
 - 🇬🇧 English README: [README.md](README.md)

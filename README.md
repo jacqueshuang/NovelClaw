@@ -327,6 +327,9 @@ See [DEPLOYMENT.md](DEPLOYMENT.md), [docs/DEPLOYMENT.zh-CN.md](docs/DEPLOYMENT.z
 
 </details>
 
+## 🙇‍ Thanks
+[Linux.do](https://linux.do/)
+
 ## Documentation 📚
 
 - 🇨🇳 Chinese README: [README.zh-CN.md](README.zh-CN.md)

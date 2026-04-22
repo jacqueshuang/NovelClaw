@@ -1,16 +1,24 @@
+# Auth Portal 的 systemd 服务示例。
 [Unit]
+# 仅用于 systemctl / journalctl 展示的服务描述。
 Description=CoLong Auth Portal
 After=network.target
 
 [Service]
+# 建议使用部署用户；需对代码目录与 /etc/novelclaw/auth-portal.env 具备读取权限。
 User=ubuntu
 Group=ubuntu
+# 应用工作目录。
 WorkingDirectory=/opt/novelclaw/apps/auth-portal
+# 部署环境变量文件路径。
 EnvironmentFile=/etc/novelclaw/auth-portal.env
+# 保持 Python 无缓冲、UTF-8 输出，便于日志排查。
 Environment=PYTHONUNBUFFERED=1
 Environment=PYTHONUTF8=1
 Environment=PYTHONDONTWRITEBYTECODE=1
+# 仅监听本机 127.0.0.1，由 Nginx 反向代理对外提供访问。
 ExecStart=/opt/novelclaw/.venv/bin/uvicorn local_web_portal.app.main:app --host 127.0.0.1 --port 8010 --workers 1
+# 进程异常退出后自动拉起。
 Restart=always
 RestartSec=5
 

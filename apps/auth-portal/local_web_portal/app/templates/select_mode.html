@@ -1,98 +1,157 @@
 {% extends "base.html" %}
 {% set zh = ui_language != "en" %}
-{% block title %}{% if zh %}选择模式 | NovelClaw 工作台{% else %}Choose Mode | NovelClaw Workspace{% endif %}{% endblock %}
+{% block title %}{% if zh %}NovelClaw 启动入口{% else %}NovelClaw Launch Hub{% endif %}{% endblock %}
 {% block content %}
-<div class="auth-page-shell auth-page-shell-register">
-  <header class="auth-page-topbar auth-page-topbar-register">
-    <a href="/select-mode" class="auth-page-brand auth-page-brand-link">
-      <span class="auth-page-brand-mark">NC</span>
-      <span>NovelClaw</span>
+<div class="launch-hub-shell">
+  <header class="launch-hub-topbar">
+    <a href="/select-mode" class="launch-hub-brand">
+      <span class="launch-hub-brand-mark">NC</span>
+      <span class="launch-hub-brand-copy">
+        <strong>NovelClaw Launch Hub</strong>
+        <small>{% if zh %}小说工作台启动入口{% else %}Workspace entry for novel creation{% endif %}</small>
+      </span>
     </a>
-    <div class="auth-register-top-actions">
-      <div class="auth-locale-switch">
+    <div class="launch-hub-topbar-actions">
+      <div class="launch-hub-locale-switch">
         <form method="post" action="/ui-language">
           <input type="hidden" name="lang" value="zh">
           <input type="hidden" name="next" value="/select-mode">
-          <button class="lang-btn {% if zh %}is-active{% endif %}" type="submit">中文</button>
+          <button class="lang-btn {% if zh %}is-active{% endif %}" type="submit" aria-pressed="{% if zh %}true{% else %}false{% endif %}" aria-label="{% if zh %}切换到中文界面{% else %}Switch to Chinese interface{% endif %}">中文</button>
         </form>
         <form method="post" action="/ui-language">
           <input type="hidden" name="lang" value="en">
           <input type="hidden" name="next" value="/select-mode">
-          <button class="lang-btn {% if not zh %}is-active{% endif %}" type="submit">English</button>
+          <button class="lang-btn {% if not zh %}is-active{% endif %}" type="submit" aria-pressed="{% if not zh %}true{% else %}false{% endif %}" aria-label="{% if zh %}切换到英文界面{% else %}Switch to English interface{% endif %}">English</button>
         </form>
+      </div>
+      <div class="launch-hub-meta-chip-group">
+        <span class="launch-hub-meta-chip">{% if zh %}当前模式：{% else %}Current mode:{% endif %} {{ current_mode_label }}</span>
+        <span class="launch-hub-meta-chip">{% if zh %}预览会话：{% else %}Preview session:{% endif %} {{ preview_session }}</span>
       </div>
     </div>
   </header>
 
-  <section class="auth-wrap auth-wrap-portal auth-wrap-register">
-    <article class="auth-hero auth-hero-portal auth-hero-register">
-      <div class="auth-hero-badge">{% if zh %}模式入口{% else %}Mode Entry{% endif %}</div>
-      <h1>{% if zh %}从这里开始，选择你的小说工作台{% else %}Start here and choose your novel workspace{% endif %}</h1>
-      <p class="auth-hero-copy">
+  <main class="launch-hub-layout">
+    <section class="launch-hub-hero">
+      <div class="launch-hub-hero-badge">{% if zh %}启动入口{% else %}Launch entry{% endif %}</div>
+      <h1>{% if zh %}选择你的写作工作台{% else %}Choose your writing workspace{% endif %}</h1>
+      <p class="launch-hub-hero-copy">
         {% if zh %}
-        这是公开版的本地入口，不包含注册、登录、邮箱验证等账号流程。你打开后就能直接进入工作台选择阶段，再按需进入不同创作模式。
+        一个入口，两种创作路径：你可以先快速生成结构，也可以直接进入长期写作与精修工作台。
         {% else %}
-        This is the public local entry point. It does not expose registration, login, or email verification flows. Open it and go straight to workspace selection.
+        One entry, two creation paths: start fast from an idea, or enter a workspace built for long-form writing and refinement.
         {% endif %}
       </p>
-      <div class="auth-hero-stack">
-        <div class="auth-hero-pill">{% if zh %}从 /select-mode 直接开始{% else %}Start directly from /select-mode{% endif %}</div>
-        <div class="auth-hero-pill">{% if zh %}MultiAgent 与 NovelClaw 双工作台{% else %}Dual workspaces: MultiAgent and NovelClaw{% endif %}</div>
-        <div class="auth-hero-pill">{% if zh %}当前预览：{{ current_mode_label }}{% else %}Current preview: {{ current_mode_label }}{% endif %}</div>
+      <div class="launch-hub-pill-row">
+        <span class="launch-hub-pill">{% if zh %}无需登录即可进入{% else %}No login required{% endif %}</span>
+        <span class="launch-hub-pill">{% if zh %}支持中英文界面{% else %}Chinese and English UI{% endif %}</span>
+        <span class="launch-hub-pill">{% if zh %}可随时切换工作台{% else %}Switch workspaces anytime{% endif %}</span>
       </div>
-    </article>
+    </section>
 
-    <article class="auth-card auth-card-portal auth-card-register">
-      <div class="auth-card-head">
+    <section class="launch-hub-panel">
+      <div class="launch-hub-panel-head">
         <div>
-          <div class="auth-card-kicker">{% if zh %}进入工作台{% else %}Enter workspace{% endif %}</div>
-          <h1>{% if zh %}选择你要打开的小说工作台{% else %}Choose the novel workspace to open{% endif %}</h1>
-          <p class="auth-card-subtitle">
-            {% if zh %}
-            当前公开版默认以本地预览会话进入，不再展示原始账户认证逻辑。
-            {% else %}
-            The public release enters with a local preview session by default and does not expose the original account flow.
-            {% endif %}
-          </p>
+          <div class="launch-hub-kicker">{% if zh %}工作台选择{% else %}Workspace decision{% endif %}</div>
+          <h2>{% if zh %}选择最适合当前目标的入口{% else %}Pick the entry that fits your current goal{% endif %}</h2>
         </div>
-        <span class="auth-top-link">{% if zh %}当前：{% else %}Current:{% endif %} {{ current_mode_label }}</span>
-      </div>
-
-      <div class="auth-mode-choice-grid">
-        <article class="auth-mode-choice {% if current_mode == 'mode_a' %}is-active{% endif %}">
-          <div class="auth-mode-choice-head">
-            <div>
-              <div class="auth-mode-choice-kicker">MultiAgent</div>
-              <h3>{% if zh %}MultiAgent 小说工作台{% else %}MultiAgent Novel Workspace{% endif %}</h3>
-            </div>
-            <span class="auth-mode-choice-state">{% if current_mode == 'mode_a' %}{% if zh %}当前{% else %}Current{% endif %}{% else %}{% if zh %}可用{% else %}Available{% endif %}{% endif %}</span>
-          </div>
-          <p class="auth-mode-choice-copy">{% if zh %}从一句清晰的 Idea 出发，快速进入结构完整、章节齐全的长篇小说生成流程。{% else %}Start from a strong idea prompt and move quickly into a structured long-form generation workflow.{% endif %}</p>
-          <a href="{{ mode_a_url }}" class="auth-mode-choice-cta auth-mode-choice-cta-primary">{% if zh %}打开 MultiAgent{% else %}Open MultiAgent{% endif %}</a>
-          <p class="auth-footnote" style="margin-top:10px;">/multiagent/dashboard</p>
-        </article>
-
-        <article class="auth-mode-choice {% if current_mode == 'mode_b' %}is-active{% endif %}">
-          <div class="auth-mode-choice-head">
-            <div>
-              <div class="auth-mode-choice-kicker">NovelClaw</div>
-              <h3>{% if zh %}NovelClaw 小说工作台{% else %}NovelClaw Workspace{% endif %}</h3>
-            </div>
-            <span class="auth-mode-choice-state">{% if current_mode == 'mode_b' %}{% if zh %}当前{% else %}Current{% endif %}{% else %}{% if zh %}可用{% else %}Available{% endif %}{% endif %}</span>
-          </div>
-          <p class="auth-mode-choice-copy">{% if zh %}更适合章节推进、记忆整理、长线创作和持续性写作打磨。{% else %}Better for chapter progression, memory-aware drafting, and longer-term writing refinement.{% endif %}</p>
-          <a href="{{ mode_b_url }}" class="auth-mode-choice-cta auth-mode-choice-cta-secondary">{% if zh %}打开 NovelClaw{% else %}Open NovelClaw{% endif %}</a>
-          <p class="auth-footnote" style="margin-top:10px;">/claw/dashboard</p>
-        </article>
-      </div>
-
-      <div class="auth-link-row auth-link-row-split">
-        <span class="auth-top-link">{% if zh %}预览会话：{% else %}Preview session:{% endif %} {{ preview_session }}</span>
         <form method="post" action="/logout">
-          <button type="submit" class="auth-inline-link">{% if zh %}重置会话{% else %}Reset session{% endif %}</button>
+          <button type="submit" class="launch-hub-inline-link">{% if zh %}重置会话{% else %}Reset session{% endif %}</button>
         </form>
       </div>
-    </article>
-  </section>
+
+      <div class="launch-hub-card-grid">
+        <article class="launch-hub-choice launch-hub-choice-multiagent {% if current_mode == 'mode_a' %}is-active{% endif %}">
+          <div class="launch-hub-choice-head">
+            <div>
+              <div class="launch-hub-choice-kicker">{% if zh %}快速成稿{% else %}Fast drafting{% endif %}</div>
+              <h3>MultiAgent</h3>
+            </div>
+            <span class="launch-hub-choice-state">{% if current_mode == 'mode_a' %}{% if zh %}当前入口{% else %}Current entry{% endif %}{% else %}{% if zh %}推荐用于快速开始{% else %}Best for quick starts{% endif %}{% endif %}</span>
+          </div>
+          <p class="launch-hub-choice-copy">
+            {% if zh %}
+            从一个想法直接进入多轮生成流程，更适合快速搭出结构、章节和方向。
+            {% else %}
+            Move from a single idea into a guided multi-step generation flow for rapid structure and chapter setup.
+            {% endif %}
+          </p>
+          <ul class="launch-hub-feature-list">
+            <li>{% if zh %}输入门槛更低{% else %}Lower input friction{% endif %}</li>
+            <li>{% if zh %}更快得到章节框架{% else %}Faster chapter scaffolding{% endif %}</li>
+            <li>{% if zh %}适合先把故事跑起来{% else %}Best when you want momentum first{% endif %}</li>
+          </ul>
+          <a href="{{ mode_a_url }}" class="launch-hub-choice-cta launch-hub-choice-cta-primary">{% if zh %}进入 MultiAgent{% else %}Enter MultiAgent{% endif %}</a>
+          <p class="launch-hub-route-label">{% if zh %}入口路由：{% else %}Entry route:{% endif %} {{ mode_a_url }}</p>
+        </article>
+
+        <article class="launch-hub-choice launch-hub-choice-claw {% if current_mode == 'mode_b' %}is-active{% endif %}">
+          <div class="launch-hub-choice-head">
+            <div>
+              <div class="launch-hub-choice-kicker">{% if zh %}长期创作{% else %}Long-form writing{% endif %}</div>
+              <h3>NovelClaw</h3>
+            </div>
+            <span class="launch-hub-choice-state">{% if current_mode == 'mode_b' %}{% if zh %}当前入口{% else %}Current entry{% endif %}{% else %}{% if zh %}推荐用于持续写作{% else %}Best for steady production{% endif %}{% endif %}</span>
+          </div>
+          <p class="launch-hub-choice-copy">
+            {% if zh %}
+            更适合章节推进、记忆整理、设定管理与持续写作打磨，适合作为长期工作台。
+            {% else %}
+            Better for chapter progression, memory-aware refinement, worldbuilding management, and sustained writing work.
+            {% endif %}
+          </p>
+          <ul class="launch-hub-feature-list">
+            <li>{% if zh %}更强的工作台感{% else %}Stronger workspace structure{% endif %}</li>
+            <li>{% if zh %}适合长期项目{% else %}Better for long-running projects{% endif %}</li>
+            <li>{% if zh %}更适合精修与延展{% else %}Best for refinement and expansion{% endif %}</li>
+          </ul>
+          <a href="{{ mode_b_url }}" class="launch-hub-choice-cta launch-hub-choice-cta-secondary">{% if zh %}进入 NovelClaw{% else %}Enter NovelClaw{% endif %}</a>
+          <p class="launch-hub-route-label">{% if zh %}入口路由：{% else %}Entry route:{% endif %} {{ mode_b_url }}</p>
+        </article>
+      </div>
+
+      <section class="launch-hub-decision-table" aria-label="{% if zh %}工作台选择建议{% else %}Workspace recommendation{% endif %}">
+        <div class="launch-hub-kicker">{% if zh %}快速判断{% else %}Quick guidance{% endif %}</div>
+        <div class="launch-hub-decision-row">
+          <span>{% if zh %}我只有一个 idea，想先快速跑起来{% else %}I have one idea and want to get moving fast{% endif %}</span>
+          <strong>MultiAgent</strong>
+        </div>
+        <div class="launch-hub-decision-row">
+          <span>{% if zh %}我要长期推进章节、设定和写作流程{% else %}I want to manage chapters, memory, and long-form writing{% endif %}</span>
+          <strong>NovelClaw</strong>
+        </div>
+      </section>
+
+      <section class="launch-hub-prep-grid">
+        <article class="launch-hub-prep-card">
+          <div class="launch-hub-kicker">{% if zh %}访问地址{% else %}Access points{% endif %}</div>
+          <h3>{% if zh %}默认端口{% else %}Default ports{% endif %}</h3>
+          <ul class="launch-hub-prep-list">
+            <li><strong>Auth Portal</strong> — 8010</li>
+            <li><strong>MultiAgent</strong> — 8011</li>
+            <li><strong>NovelClaw</strong> — 8012</li>
+          </ul>
+        </article>
+        <article class="launch-hub-prep-card">
+          <div class="launch-hub-kicker">{% if zh %}启动前准备{% else %}Before you start{% endif %}</div>
+          <h3>{% if zh %}常见启动配置{% else %}Common startup config{% endif %}</h3>
+          <ul class="launch-hub-prep-list">
+            <li>{% if zh %}<code>APP_SESSION_SECRET</code>：生产环境应显式设置。{% else %}<code>APP_SESSION_SECRET</code>: set it explicitly for production.{% endif %}</li>
+            <li>{% if zh %}按所选 provider 填写一个密钥：{% else %}Set one key for your chosen provider:{% endif %} <code>LLM_API_KEY</code> / <code>DEEPSEEK_API_KEY</code> / <code>OPENAI_API_KEY</code> / <code>CODEX_API_KEY</code></li>
+            <li>{% if zh %}<code>APP_DATABASE_URL</code>：未填写时回退到本地数据目录。{% else %}<code>APP_DATABASE_URL</code>: falls back to local data storage when left blank.{% endif %}</li>
+          </ul>
+        </article>
+        <article class="launch-hub-prep-card">
+          <div class="launch-hub-kicker">{% if zh %}推荐顺序{% else %}Suggested order{% endif %}</div>
+          <h3>{% if zh %}三步启动{% else %}Three-step launch{% endif %}</h3>
+          <ol class="launch-hub-prep-list launch-hub-prep-list-ordered">
+            <li>{% if zh %}先完成 `.env` 配置{% else %}Configure `.env` files{% endif %}</li>
+            <li>{% if zh %}再启动对应服务{% else %}Start the required services{% endif %}</li>
+            <li>{% if zh %}最后从这里进入工作台{% else %}Enter the workspace from here{% endif %}</li>
+          </ol>
+        </article>
+      </section>
+    </section>
+  </main>
 </div>
 {% endblock %}

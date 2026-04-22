@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.*
+!.env.example
+local_web_portal/data/
+local_web_portal/runs/
+*.db
+*.db-journal
+*.log

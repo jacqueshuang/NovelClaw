@@ -27,7 +27,7 @@
    - `apps/multiagent/.env` - 添加 OpenAI/Anthropic API 密钥
    - `apps/auth-portal/.env` - 修改 SECRET_KEY
 
-4. **构建并启动所有服务**：
+4. **构建并启动所有服务（源码构建方式）**：
    
    **Windows 用户**：
    ```batch
@@ -49,6 +49,63 @@
    - 认证门户：http://localhost:8010/select-mode
    - 多智能体：http://localhost:8011/dashboard
    - NovelClaw：http://localhost:8012/dashboard
+
+### 使用 GHCR 预构建镜像部署
+
+如果你不希望在部署机器上执行 `docker build`，可以直接使用 GitHub Container Registry（GHCR）中预先构建好的镜像进行部署。这样可以缩短部署时间，并避免在目标机器上安装完整的构建环境。
+
+#### 自动发布规则
+
+- 推送到 `main` 分支时，会自动发布 `main` 和 `sha-<short_sha>` 标签。
+- 推送 Git tag 时，会自动发布对应 tag 和 `latest` 标签。
+
+#### 可用镜像
+
+- 单一镜像：`ghcr.io/<owner>/novelclaw`
+- 认证门户：`ghcr.io/<owner>/novelclaw-auth-portal`
+- 多智能体：`ghcr.io/<owner>/novelclaw-multiagent`
+- NovelClaw：`ghcr.io/<owner>/novelclaw-workspace`
+
+#### 登录 GHCR
+
+将以下环境变量替换为你的 GitHub 信息，并在需要认证拉取镜像时执行登录：
+
+```bash
+export GHCR_OWNER=<your-github-owner-lowercase>
+export GHCR_USERNAME=<your-github-username>
+export GHCR_TOKEN=<your-github-token-with-read:packages>
+
+echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
+```
+
+#### 使用单一镜像部署
+
+```bash
+export GHCR_OWNER=<your-github-owner-lowercase>
+export IMAGE_TAG=main
+docker compose -f docker-compose.ghcr-single.yml up -d
+```
+
+`docker-compose.ghcr-single.yml` 会让三个服务都从同一个 GHCR 预构建镜像启动。
+
+#### 使用三个服务镜像部署
+
+```bash
+export GHCR_OWNER=<your-github-owner-lowercase>
+export IMAGE_TAG=main
+docker compose -f docker-compose.ghcr-services.yml up -d
+```
+
+`docker-compose.ghcr-services.yml` 会分别拉取认证门户、多智能体和 NovelClaw 三个服务镜像。
+
+#### 何时需要登录
+
+- 如果 GHCR 包是私有的，部署机器在首次拉取或令牌失效后需要先登录。
+- 如果 GHCR 包已公开，通常可以直接拉取，无需执行 `docker login`。
+
+#### 查看已发布镜像
+
+镜像发布完成后，可以在对应 GitHub 仓库或组织的 **Packages** 页面查看可用镜像和标签。
 
 ### Docker 常用命令
 

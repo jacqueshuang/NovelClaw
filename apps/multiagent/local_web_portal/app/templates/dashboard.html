@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ t("dashboard.page_title") }}{% endblock %}
 {% block content %}
-{% set is_zh = locale() == "zh-CN" %}
+{% set is_zh = shared_locale() == "zh" %}
 {% set ns = namespace(saved_keys=0, active_sessions=0, running_jobs=0) %}
 {% for provider in providers %}
   {% if cred_map.get(provider) %}

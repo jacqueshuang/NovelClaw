@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title %}{{ "Providers | CoLong MultiAgent" if locale() == "zh-CN" else "Providers | CoLong MultiAgent" }}{% endblock %}
+{% block title %}{{ "Providers | CoLong MultiAgent" if shared_locale() == "zh" else "Providers | CoLong MultiAgent" }}{% endblock %}
 {% block content %}
-{% set is_zh = locale() == "zh-CN" %}
+{% set is_zh = shared_locale() == "zh" %}
 {% set ns = namespace(saved_keys=0) %}
 {% for provider in providers %}
   {% if cred_map.get(provider) %}

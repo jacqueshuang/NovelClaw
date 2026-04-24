@@ -148,8 +148,8 @@ def _provider_env(
         "MAX_TOTAL_ITERATIONS": str(settings.max_total_iterations),
         "EXECUTION_MODE": settings.execution_mode,
         "CLAW_MAX_STEPS": str(settings.claw_max_steps),
-        "LANGUAGE": (language or settings.ui_language or "en").lower(),
-        "SOURCE_LANGUAGE": (source_language or language or settings.ui_language or "en").lower(),
+        "LANGUAGE": (language or settings.ui_language or "zh").lower(),
+        "SOURCE_LANGUAGE": (source_language or language or settings.ui_language or "zh").lower(),
         "TRANSLATION_MODE": translation_mode or "follow_input",
         "FAST_MODE": "1" if settings.fast_mode else "0",
         "FULL_CYCLE_INTERVAL": str(settings.full_cycle_interval),
@@ -209,7 +209,7 @@ def _job_language_profile(db: Session, job_id: int) -> tuple[str, str, str]:
         .order_by(IdeaCopilotSession.updated_at.desc())
     ).scalar_one_or_none()
     if not session:
-        fallback = settings.ui_language if settings.ui_language in {"en", "zh"} else "en"
+        fallback = settings.ui_language if settings.ui_language in {"en", "zh"} else "zh"
         return fallback, fallback, "follow_input"
 
     try:
@@ -217,9 +217,9 @@ def _job_language_profile(db: Session, job_id: int) -> tuple[str, str, str]:
     except Exception:
         state = {}
 
-    preferred = str(state.get("preferred_language") or settings.ui_language or "en").lower()
+    preferred = str(state.get("preferred_language") or settings.ui_language or "zh").lower()
     if preferred not in {"en", "zh"}:
-        preferred = "en"
+        preferred = "zh"
     source = str(state.get("source_language") or preferred).lower()
     if source not in {"en", "zh"}:
         source = preferred

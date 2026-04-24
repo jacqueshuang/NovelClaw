@@ -1,4 +1,13 @@
 ﻿:root {
+  --ui-bg: #071521;
+  --ui-surface: rgba(255, 255, 255, 0.86);
+  --ui-surface-strong: #ffffff;
+  --ui-border: rgba(148, 163, 184, 0.22);
+  --ui-text: #0f172a;
+  --ui-muted: #5b677d;
+  --ui-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+  --ui-accent: #4f6bff;
+  --ui-accent-soft: rgba(79, 107, 255, 0.16);
   --sidebar-bg: #091225;
   --sidebar-bg-2: #0c1730;
   --sidebar-line: rgba(255,255,255,0.05);
@@ -9657,6 +9666,63 @@ textarea:focus, input:focus, select:focus {
   word-break: break-word;
 }
 
+.launch-hub-metric-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.launch-hub-metric {
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.launch-hub-metric span {
+  display: block;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.launch-hub-metric strong {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.launch-hub-route-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.75fr);
+  gap: 14px;
+  align-items: stretch;
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(73, 93, 133, 0.12);
+  background: linear-gradient(135deg, rgba(45, 99, 216, 0.08) 0%, rgba(113, 85, 248, 0.08) 100%);
+}
+
+.launch-hub-route-summary p {
+  margin: 8px 0 0;
+  color: #566985;
+  line-height: 1.7;
+}
+
+.launch-hub-system-note {
+  display: grid;
+  align-content: center;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(45, 99, 216, 0.12);
+  background: rgba(255, 255, 255, 0.72);
+  color: #2d4160;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
 .launch-hub-decision-table {
   padding: 18px 20px;
   border-radius: 22px;
@@ -9739,7 +9805,9 @@ textarea:focus, input:focus, select:focus {
   }
 
   .launch-hub-card-grid,
-  .launch-hub-prep-grid {
+  .launch-hub-metric-row,
+  .launch-hub-prep-grid,
+  .launch-hub-route-summary {
     grid-template-columns: 1fr;
   }
 

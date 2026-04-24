@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ locale() }}">
+<html lang="{{ shared_locale() }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +15,7 @@
   {% set is_jobs = current_path.startswith(app_path('/jobs')) %}
   {% set is_providers = current_path.startswith(app_path('/providers')) %}
   {% set is_sessions = current_path.startswith(app_path('/sessions')) or '/idea-copilot/' in current_path %}
-  {% set is_zh = locale() == "zh-CN" %}
+  {% set is_zh = shared_locale() == "zh" %}
 
   <div class="portal-bg">
     <div class="portal-orb portal-orb-a"></div>
@@ -113,14 +113,10 @@
             </div>
           </div>
 
-          <form method="post" action="{{ app_path('/language') }}" class="console-locale-form">
+          <form method="post" action="{{ app_path('/language') }}" class="console-locale-switch">
             <input type="hidden" name="next" value="{{ current_path }}">
-            <label for="locale-switch" class="console-block-label">{{ "语言" if is_zh else "Language" }}</label>
-            <select id="locale-switch" name="locale" class="locale-select" onchange="this.form.submit()">
-              {% for item in locale_options() %}
-              <option value="{{ item.code }}" {% if item.code == locale() %}selected{% endif %}>{{ item.label }}</option>
-              {% endfor %}
-            </select>
+            <button type="submit" name="locale" value="zh" class="lang-btn {% if shared_locale() == 'zh' %}is-active{% endif %}" aria-pressed="{% if shared_locale() == 'zh' %}true{% else %}false{% endif %}">中文</button>
+            <button type="submit" name="locale" value="en" class="lang-btn {% if shared_locale() == 'en' %}is-active{% endif %}" aria-pressed="{% if shared_locale() == 'en' %}true{% else %}false{% endif %}">English</button>
           </form>
 
           <div class="console-account-card">
@@ -195,7 +191,7 @@
 
   <script>
     window.PORTAL_BASE_PATH = {{ app_base_path|tojson }};
-    window.PORTAL_LOCALE = {{ locale()|tojson }};
+    window.PORTAL_LOCALE = {{ shared_locale()|tojson }};
     window.PORTAL_I18N = {{ client_i18n()|tojson }};
   </script>
   <script>

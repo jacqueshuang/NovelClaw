@@ -1,10 +1,16 @@
 {% extends "base.html" %}
 {% block title %}{{ ui_texts.models_page_title }} | NovelClaw{% endblock %}
 {% block content %}
-<section class="page-head">
-  <h1>{{ ui_texts.models_page_title }}</h1>
-  <p>{{ ui_texts.models_page_desc }}</p>
-</section>
+<header class="ws-shell-head">
+  <div class="ws-shell-copy">
+    <div class="ws-shell-kicker">{{ ui_text('模型面板', 'Model Surface') }}</div>
+    <h1>{{ ui_texts.models_page_title }}</h1>
+    <div class="ws-shell-meta">
+      <span>{{ ui_text('Provider 数量', 'Providers') }}: {{ model_overview.providers|length }}</span>
+      <span>{{ ui_text('当前模式', 'Mode') }}: {{ 'modelless' if modelless_mode else 'provider' }}</span>
+    </div>
+  </div>
+</header>
 
 <section class="workspace-grid">
   <article class="workspace-panel">

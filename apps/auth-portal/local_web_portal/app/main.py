@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 
 from .db import engine, get_db
+from .locale import apply_ui_locale, resolve_ui_locale
 from .models import Base, User
 from .security import SESSION_SECRET
 from .settings import BASE_DIR, settings
@@ -51,11 +52,7 @@ def _safe_next_path(target: str, default: str = "/select-mode") -> str:
 
 
 def _ui_language(request: Request) -> str:
-    session_lang = str(request.session.get("ui_language", "") or "").lower()
-    if session_lang in {"zh", "en"}:
-        return session_lang
-    configured = str(settings.ui_language or "").lower()
-    return configured if configured in {"zh", "en"} else "en"
+    return resolve_ui_locale(request)
 
 
 def _portal_context(request: Request, **extra):
@@ -144,8 +141,9 @@ def choose_mode_b(request: Request, db: Session = Depends(get_db)):
 
 @app.post("/ui-language")
 def set_ui_language(request: Request, lang: str = Form(...), next: str = Form("/select-mode")):
-    request.session["ui_language"] = "zh" if str(lang or "").lower().startswith("zh") else "en"
-    return _redirect(_safe_next_path(next))
+    response = _redirect(_safe_next_path(next))
+    apply_ui_locale(request, response, lang)
+    return response
 
 
 @app.post("/logout")

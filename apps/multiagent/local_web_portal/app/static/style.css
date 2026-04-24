@@ -1,4 +1,13 @@
 :root {
+  --ui-bg: #0b0f14;
+  --ui-surface: rgba(255, 255, 255, 0.9);
+  --ui-surface-strong: #ffffff;
+  --ui-border: rgba(148, 163, 184, 0.18);
+  --ui-text: #101828;
+  --ui-muted: #667085;
+  --ui-shadow: 0 22px 52px rgba(15, 23, 42, 0.14);
+  --ui-accent: #e7a64a;
+  --ui-accent-soft: rgba(231, 166, 74, 0.18);
   --bg: #f3efe8;
   --bg-strong: #e8e2d8;
   --surface: #ffffff;
@@ -417,6 +426,44 @@ p {
   border-radius: 999px;
   background: #50d59d;
   box-shadow: 0 0 0 8px rgba(80, 213, 157, 0.14);
+}
+
+.console-locale-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.065);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.console-locale-switch .lang-btn {
+  min-height: 38px;
+  border-radius: 999px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  font-weight: 800;
+  transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
+}
+
+.console-locale-switch .lang-btn:hover,
+.console-locale-switch .lang-btn:focus-visible {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.console-locale-switch .lang-btn.is-active {
+  color: #111827;
+  background: linear-gradient(135deg, #f1c56c 0%, #e08a57 100%);
+  box-shadow: 0 12px 24px rgba(220, 110, 71, 0.2);
+}
+
+.console-locale-switch .lang-btn.is-active:hover,
+.console-locale-switch .lang-btn.is-active:focus-visible {
+  color: #111827;
+  transform: translateY(-1px);
 }
 
 .locale-select,
@@ -1291,7 +1338,7 @@ body.sidebar-collapsed .console-shell {
 body.sidebar-collapsed .console-brand-copy,
 body.sidebar-collapsed .console-nav-copy,
 body.sidebar-collapsed .console-sidebar-panel-feature,
-body.sidebar-collapsed .console-locale-form,
+body.sidebar-collapsed .console-locale-switch,
 body.sidebar-collapsed .console-account-card,
 body.sidebar-collapsed .console-sidebar-actions,
 body.sidebar-collapsed .console-block-label,

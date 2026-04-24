@@ -4,13 +4,18 @@ from typing import Dict, List
 
 from jinja2 import pass_context
 from starlette.requests import Request
+from starlette.responses import Response
 
-DEFAULT_LOCALE = "en"
+from .settings import settings
+
+PRODUCT_LOCALE_COOKIE = "colong_ui_locale"
+DEFAULT_SHARED_LOCALE = "zh"
+DEFAULT_LOCALE = "zh-CN"
 SUPPORTED_LOCALES = ("en", "zh-CN")
 
 LOCALE_OPTIONS = (
+    {"code": "zh", "label": "中文"},
     {"code": "en", "label": "English"},
-    {"code": "zh-CN", "label": "中文"},
 )
 
 TRANSLATIONS: Dict[str, Dict[str, str]] = {
@@ -504,36 +509,69 @@ MESSAGE_ALIASES = {
 }
 
 
-def normalize_locale(value: str | None) -> str:
-    raw = (value or "").strip().lower()
-    if raw in {"zh", "zh-cn", "zh_hans", "zh-hans", "zh_cn"}:
-        return "zh-CN"
-    if raw.startswith("zh-"):
-        return "zh-CN"
-    if raw in {"en", "en-us", "en_us", "en-gb", "en_gb"}:
+def _canonicalize_shared_locale(value: str | None) -> str | None:
+    raw = (value or "").strip().lower().replace("_", "-")
+    if raw == "en" or raw.startswith("en-"):
         return "en"
-    return DEFAULT_LOCALE
+    if raw == "zh" or raw.startswith("zh-"):
+        return "zh"
+    return None
+
+
+def normalize_shared_locale(value: str | None) -> str:
+    normalized = _canonicalize_shared_locale(value)
+    if normalized:
+        return normalized
+    configured = _canonicalize_shared_locale(settings.ui_language)
+    if configured:
+        return configured
+    return DEFAULT_SHARED_LOCALE
+
+
+def to_internal_locale(shared_locale: str | None) -> str:
+    return "zh-CN" if normalize_shared_locale(shared_locale) == "zh" else "en"
+
+
+def from_internal_locale(value: str | None) -> str:
+    normalized = _canonicalize_shared_locale(value)
+    if normalized:
+        return normalized
+    return normalize_shared_locale(None)
+
+
+def normalize_locale(value: str | None) -> str:
+    return to_internal_locale(from_internal_locale(value))
+
+
+def get_shared_locale(request: Request | None) -> str:
+    if request is None:
+        return normalize_shared_locale(None)
+    cookie_locale = request.cookies.get(PRODUCT_LOCALE_COOKIE)
+    if cookie_locale:
+        return normalize_shared_locale(cookie_locale)
+    session_locale = request.session.get("locale")
+    if session_locale:
+        return from_internal_locale(str(session_locale))
+    return normalize_shared_locale(None)
 
 
 def get_locale(request: Request | None) -> str:
-    if request is None:
-        return DEFAULT_LOCALE
-    session_locale = request.session.get("locale")
-    if session_locale:
-        return normalize_locale(str(session_locale))
-    accept_language = request.headers.get("accept-language", "")
-    for chunk in accept_language.split(","):
-        code = chunk.split(";", 1)[0].strip()
-        normalized = normalize_locale(code)
-        if normalized in SUPPORTED_LOCALES:
-            return normalized
-    return DEFAULT_LOCALE
+    return to_internal_locale(get_shared_locale(request))
 
 
-def set_locale(request: Request, locale: str | None) -> str:
-    normalized = normalize_locale(locale)
-    request.session["locale"] = normalized
-    return normalized
+def set_locale(request: Request, response: Response, locale: str | None) -> str:
+    shared = normalize_shared_locale(locale)
+    internal = to_internal_locale(shared)
+    request.session["locale"] = internal
+    response.set_cookie(
+        key=PRODUCT_LOCALE_COOKIE,
+        value=shared,
+        path="/",
+        samesite="lax",
+        secure=settings.https_only,
+        domain=settings.shared_cookie_domain or None,
+    )
+    return internal
 
 
 def translate(key: str | None, locale: str | None = None, **kwargs) -> str:
@@ -565,6 +603,10 @@ def locale_options() -> List[Dict[str, str]]:
     return list(LOCALE_OPTIONS)
 
 
+def shared_locale_options() -> List[Dict[str, str]]:
+    return list(LOCALE_OPTIONS)
+
+
 def install_i18n(templates) -> None:
     @pass_context
     def t(context, key: str | None, **kwargs) -> str:
@@ -577,11 +619,18 @@ def install_i18n(templates) -> None:
         return get_locale(request)
 
     @pass_context
+    def current_shared_locale(context) -> str:
+        request = context.get("request")
+        return get_shared_locale(request)
+
+    @pass_context
     def client_i18n(context) -> Dict[str, str]:
         request = context.get("request")
         return client_translations(get_locale(request))
 
     templates.env.globals["t"] = t
     templates.env.globals["locale"] = current_locale
+    templates.env.globals["shared_locale"] = current_shared_locale
     templates.env.globals["client_i18n"] = client_i18n
     templates.env.globals["locale_options"] = locale_options
+    templates.env.globals["shared_locale_options"] = shared_locale_options

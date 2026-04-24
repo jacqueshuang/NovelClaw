@@ -87,11 +87,12 @@ class Settings:
     https_only: bool = os.getenv("APP_HTTPS_ONLY", "0") == "1"
     session_cookie_name: str = env_or_default("APP_SESSION_COOKIE_NAME", "session")
     session_cookie_domain: str = os.getenv("APP_SESSION_COOKIE_DOMAIN", "").strip()
+    shared_cookie_domain: str = os.getenv("APP_SHARED_COOKIE_DOMAIN", "").strip()
     shared_portal_url: str = os.getenv("APP_SHARED_PORTAL_URL", "").strip().rstrip("/")
     base_path: str = os.getenv("APP_BASE_PATH", "").strip().rstrip("/")
     modelless_mode: bool = os.getenv("WEB_MODELLESS_MODE", "1") == "1"
     default_provider: str = os.getenv("WEB_DEFAULT_PROVIDER", "deepseek").lower()
-    ui_language: str = os.getenv("WEB_UI_LANGUAGE", "en").lower()
+    ui_language: str = os.getenv("WEB_UI_LANGUAGE", "zh").lower()
     max_iterations: int = int(os.getenv("WEB_MAX_ITERATIONS", "8"))
     max_total_iterations: int = int(os.getenv("WEB_MAX_TOTAL_ITERATIONS", "16"))
     execution_mode: str = os.getenv("WEB_EXECUTION_MODE", "claw").lower()

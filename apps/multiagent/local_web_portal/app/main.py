@@ -1147,8 +1147,9 @@ def logout(request: Request):
 
 @app.post("/language")
 def change_language(request: Request, locale: str = Form(...), next: str = Form("/")):
-    set_locale(request, locale)
-    return _redirect(_safe_next_path(next))
+    response = _redirect(_safe_next_path(next))
+    set_locale(request, response, locale)
+    return response
 
 
 @app.get("/dashboard")

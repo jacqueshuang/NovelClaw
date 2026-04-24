@@ -58,10 +58,11 @@ class Settings:
     https_only: bool = env_flag("APP_HTTPS_ONLY", False)
     session_cookie_name: str = env_or_default("APP_SESSION_COOKIE_NAME", "session")
     session_cookie_domain: str = os.getenv("APP_SESSION_COOKIE_DOMAIN", "").strip()
+    shared_cookie_domain: str = os.getenv("APP_SHARED_COOKIE_DOMAIN", "").strip()
     app_base_url: str = os.getenv("APP_BASE_URL", "").strip().rstrip("/")
     app_multiagent_url: str = os.getenv("APP_MULTIAGENT_URL", "").strip()
     app_claw_url: str = os.getenv("APP_CLAW_URL", "").strip()
-    ui_language: str = os.getenv("WEB_UI_LANGUAGE", "en").lower()
+    ui_language: str = os.getenv("WEB_UI_LANGUAGE", "zh").lower()
     preview_user_email: str = env_or_default("APP_PREVIEW_USER_EMAIL", "preview@novelclaw.local").lower()
     session_secret_env: str = env_or_default("APP_SESSION_SECRET", "", "SECRET_KEY")
 

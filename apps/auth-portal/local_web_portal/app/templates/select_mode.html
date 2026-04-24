@@ -49,6 +49,21 @@
       </div>
     </section>
 
+    <section class="launch-hub-metric-row">
+      <article class="launch-hub-metric">
+        <span>{% if zh %}默认语言{% else %}Default locale{% endif %}</span>
+        <strong>{% if ui_language == 'en' %}English{% else %}中文{% endif %}</strong>
+      </article>
+      <article class="launch-hub-metric">
+        <span>{% if zh %}当前会话{% else %}Preview session{% endif %}</span>
+        <strong>{{ preview_session }}</strong>
+      </article>
+      <article class="launch-hub-metric">
+        <span>{% if zh %}已选工作台{% else %}Selected workspace{% endif %}</span>
+        <strong>{{ current_mode_label }}</strong>
+      </article>
+    </section>
+
     <section class="launch-hub-panel">
       <div class="launch-hub-panel-head">
         <div>
@@ -109,6 +124,20 @@
           <p class="launch-hub-route-label">{% if zh %}入口路由：{% else %}Entry route:{% endif %} {{ mode_b_url }}</p>
         </article>
       </div>
+
+      <section class="launch-hub-route-summary">
+        <div>
+          <span class="launch-hub-kicker">{% if zh %}路由摘要{% else %}Route summary{% endif %}</span>
+          <p>{% if zh %}入口页现在明确展示三个服务的默认端口与当前目标入口。{% else %}The front door now makes the current destination and the three default service ports explicit.{% endif %}</p>
+        </div>
+        <div class="launch-hub-system-note">
+          {% if zh %}
+          语言切换会同步写入共享 cookie，之后进入 MultiAgent 或 NovelClaw 时应保持一致。
+          {% else %}
+          Language changes are now written to the shared cookie so MultiAgent and NovelClaw can keep the same selection.
+          {% endif %}
+        </div>
+      </section>
 
       <section class="launch-hub-decision-table" aria-label="{% if zh %}工作台选择建议{% else %}Workspace recommendation{% endif %}">
         <div class="launch-hub-kicker">{% if zh %}快速判断{% else %}Quick guidance{% endif %}</div>

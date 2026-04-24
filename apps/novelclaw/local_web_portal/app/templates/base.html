@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="{{ ui_language or 'en' }}">
+<html lang="{{ ui_language or 'zh' }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -120,12 +120,12 @@
           <form method="post" action="{{ app_path('/ui-language') }}">
             <input type="hidden" name="lang" value="zh">
             <input type="hidden" name="next" value="{{ current_path if current_path else current_public_path(request) }}">
-            <button class="lang-btn {% if ui_language == 'zh' %}is-active{% endif %}" type="submit">{{ ui_texts.lang_zh }}</button>
+            <button class="lang-btn {% if ui_language == 'zh' %}is-active{% endif %}" type="submit" aria-pressed="{% if ui_language == 'zh' %}true{% else %}false{% endif %}">中文</button>
           </form>
           <form method="post" action="{{ app_path('/ui-language') }}">
             <input type="hidden" name="lang" value="en">
             <input type="hidden" name="next" value="{{ current_path if current_path else current_public_path(request) }}">
-            <button class="lang-btn {% if ui_language == 'en' %}is-active{% endif %}" type="submit">{{ ui_texts.lang_en }}</button>
+            <button class="lang-btn {% if ui_language == 'en' %}is-active{% endif %}" type="submit" aria-pressed="{% if ui_language == 'en' %}true{% else %}false{% endif %}">English</button>
           </form>
         </div>
       </div>

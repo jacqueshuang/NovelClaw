@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ t("idea.page_title", id=session_data.id) }}{% endblock %}
 {% block content %}
-{% set is_zh = locale() == "zh-CN" %}
+{% set is_zh = shared_locale() == "zh" %}
 {% set latest = latest_turn|default({}, true) %}
 {% set latest_questions = latest.questions if latest.questions is defined else [] %}
 

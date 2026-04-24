@@ -38,6 +38,7 @@ from agents.idea_copilot_agent import (
 )
 from .db import SessionLocal, engine, get_db, open_auth_db
 from .job_runner import run_generation_job
+from .locale import apply_ui_locale, resolve_ui_locale
 from .models import ApiCredential, Base, CapabilityPreference, GenerationJob, IdeaCopilotSession, ProviderConfig, User
 from .provider_registry import (
     ProviderSpec,
@@ -280,11 +281,7 @@ def _lang_text(lang: str, zh: str, en: str) -> str:
 
 
 def _ui_language(request: Request) -> str:
-    session_lang = str(request.session.get("ui_language", "") or "").lower()
-    if session_lang in {"zh", "en"}:
-        return session_lang
-    configured = str(settings.ui_language or "").lower()
-    return configured if configured in {"zh", "en"} else "en"
+    return resolve_ui_locale(request)
 
 
 def _ui_text(lang: str, zh: str, en: str) -> str:
@@ -849,7 +846,7 @@ def _memory_topic_hint(index: Dict, fallback: str = "global") -> str:
 @lru_cache(maxsize=1)
 def _portal_memory_system() -> MemorySystem:
     cfg = Config(require_api_key=False)
-    cfg.language = settings.ui_language if settings.ui_language in {"en", "zh"} else "en"
+    cfg.language = settings.ui_language if settings.ui_language in {"en", "zh"} else "zh"
     cfg.memory_only_mode = True
     cfg.enable_rag = False
     cfg.enable_static_kb = False
@@ -3739,9 +3736,9 @@ def console_status(request: Request, db: Session = Depends(get_db)):
 
 @app.post("/ui-language")
 def set_ui_language(request: Request, lang: str = Form(...), next: str = Form("/console/chat")):
-    normalized = (lang or "").strip().lower()
-    request.session["ui_language"] = normalized if normalized in {"zh", "en"} else "en"
-    return _redirect(_safe_next_path(next, "/console/chat"))
+    response = _redirect(_safe_next_path(next, "/console/chat"))
+    apply_ui_locale(request, response, lang)
+    return response
 
 
 @app.post("/api-keys")

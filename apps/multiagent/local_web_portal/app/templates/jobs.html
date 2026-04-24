@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title %}{{ "任务页 | CoLong MultiAgent" if locale() == "zh-CN" else "Jobs | CoLong MultiAgent" }}{% endblock %}
+{% block title %}{{ "任务页 | CoLong MultiAgent" if shared_locale() == "zh" else "Jobs | CoLong MultiAgent" }}{% endblock %}
 {% block content %}
-{% set is_zh = locale() == "zh-CN" %}
+{% set is_zh = shared_locale() == "zh" %}
 {% set ns = namespace(running_jobs=0) %}
 {% for job in jobs %}
   {% if job.status in ["queued", "running"] %}

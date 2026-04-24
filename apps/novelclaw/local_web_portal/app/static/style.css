@@ -1,4 +1,13 @@
 ﻿:root {
+  --ui-bg: #08111f;
+  --ui-surface: rgba(255, 255, 255, 0.88);
+  --ui-surface-strong: #ffffff;
+  --ui-border: rgba(99, 102, 241, 0.16);
+  --ui-text: #0f172a;
+  --ui-muted: #5b6477;
+  --ui-shadow: 0 24px 58px rgba(30, 41, 59, 0.16);
+  --ui-accent: #5b7cff;
+  --ui-accent-soft: rgba(91, 124, 255, 0.18);
   --sidebar-bg: #091225;
   --sidebar-bg-2: #0c1730;
   --sidebar-line: rgba(255,255,255,0.05);
